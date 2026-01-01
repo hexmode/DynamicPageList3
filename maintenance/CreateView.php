@@ -63,10 +63,11 @@ class CreateView extends LoggedUpdateMaintenance {
 
 			$query = "CREATE VIEW {$dbw->tablePrefix()}dpl_clview AS SELECT " .
 				"$sqlNullMethod(cl_from, page_id) AS cl_from, " .
-				"$sqlNullMethod(cl_to, '') AS cl_to, cl_sortkey " .
+				"$sqlNullMethod(lt.lt_title, '') AS cl_to, " .
+				"$sqlNullMethod(cl_sortkey, '') AS cl_sortkey " .
 				"FROM {$dbw->tablePrefix()}page " .
-				"LEFT OUTER JOIN {$dbw->tablePrefix()}categorylinks " .
-				"ON {$dbw->tablePrefix()}page.page_id = cl_from;";
+				"LEFT OUTER JOIN {$dbw->tablePrefix()}categorylinks ON {$dbw->tablePrefix()}page.page_id = cl_from " .
+				"LEFT OUTER JOIN {$dbw->tablePrefix()}linktarget lt ON cl_target_id = lt.lt_id;";
 
 			// Create the view
 			try {
